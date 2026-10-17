@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- One position-commanded joint. initial_value is the home position. -->
+  <xacro:macro name="position_joint" params="name initial_value:=0.0">
+    <joint name="${name}">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">${initial_value}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <!--
+    Hardware abstraction: swap the <hardware> block for a real driver later;
+    controllers and joint interfaces stay unchanged.
+  -->
+  <xacro:macro name="arm_ros2_control">
+    <ros2_control name="ArmSystem" type="system">
+      <hardware>
+        <xacro:if value="$(arg use_gazebo)">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </xacro:if>
+        <xacro:unless value="$(arg use_gazebo)">
+          <plugin>mock_components/GenericSystem</plugin>
+        </xacro:unless>
+      </hardware>
+      <!-- initial position values from urdf studio.-->
+      <xacro:position_joint name="base_yaw_joint" initial_value="0.0"/>
+      <xacro:position_joint name="shoulder_pitch_joint" initial_value="6.26"/>
+      <xacro:position_joint name="elbow_pitch_joint" initial_value="1.572"/>
+      <xacro:position_joint name="wrist_roll_joint" initial_value="0.0"/>
+      <xacro:position_joint name="wrist_pitch_joint" initial_value="0.0"/>
+    </ros2_control>
+  </xacro:macro>
+</robot>

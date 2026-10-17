@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Rigid link: same visual and collision meshes, with explicit inertial properties. -->
+  <xacro:macro name="mesh_link"
+               params="name mesh material visual_xyz mass com_xyz ixx iyy izz ixy iyz ixz">
+    <link name="${name}">
+      <inertial>
+        <origin xyz="${com_xyz}" rpy="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${ixx}" iyy="${iyy}" izz="${izz}" ixy="${ixy}" iyz="${iyz}" ixz="${ixz}"/>
+      </inertial>
+      <visual>
+        <origin xyz="${visual_xyz}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://arm_description/meshes/${mesh}" scale="${mesh_scale}"/>
+        </geometry>
+        <material name="${material}"/>
+      </visual>
+      <collision>
+        <origin xyz="${visual_xyz}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://arm_description/meshes/${mesh}" scale="${mesh_scale}"/>
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+</robot>

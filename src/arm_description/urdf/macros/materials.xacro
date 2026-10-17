@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Colours taken from arm_assembly.step (COLOUR_RGB, 8-bit value / 255). -->
+  <!-- base_link body: Opaque(128,128,128) -->
+  <material name="base_grey">
+    <color rgba="0.501961 0.501961 0.501961 1.0"/>
+  </material>
+  <!-- turret/upper_arm/forearm/wrist_roll body: Opaque(177,25,25) -->
+  <material name="arm_red">
+    <color rgba="0.694118 0.098039 0.098039 1.0"/>
+  </material>
+  <!-- wrist_pitch face colour: Opaque(128,0,0) -->
+  <material name="wrist_maroon">
+    <color rgba="0.501961 0.0 0.0 1.0"/>
+  </material>
+</robot>

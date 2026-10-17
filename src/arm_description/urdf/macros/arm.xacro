@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    Kinematic tree and rigid-body data of the arm.
+    All numeric values are carried over unchanged from the original
+    arm.xacro (Fusion export); only names changed.
+  -->
+  <xacro:macro name="arm_robot">
+
+    <!-- fixed world anchor (arg fixed_base). Identity transform. -->
+    <xacro:if value="$(arg fixed_base)">
+      <link name="world"/>
+      <joint name="world_to_base_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent link="world"/>
+        <child link="base_link"/>
+      </joint>
+    </xacro:if>
+
+    <xacro:mesh_link name="base_link" mesh="base_link.stl" material="base_grey"
+      visual_xyz="0 0 0" mass="46.82820490588493"
+      com_xyz="-0.0013795904255898897 0.006144590422410405 0.03494970550616308"
+      ixx="0.294832" iyy="0.294832" izz="0.533146"
+      ixy="-0.006274" iyz="-0.000229" ixz="0.000229"/>
+
+    <xacro:mesh_link name="turret_link" mesh="turret_link.stl" material="arm_red"
+      visual_xyz="-0.0 -0.004765 -0.104765" mass="17.939967472684376"
+      com_xyz="-0.053876625091077754 0.0009658460288886374 0.05659360650225023"
+      ixx="0.080055" iyy="0.161621" izz="0.117393"
+      ixy="0.003027" iyz="-0.001566" ixz="0.05871"/>
+
+    <xacro:mesh_link name="upper_arm_link" mesh="upper_arm_link.stl" material="arm_red"
+      visual_xyz="0.138256 -0.016774 -0.227814" mass="7.270322327784246"
+      com_xyz="0.018624083162768285 0.03495204005376849 0.14159796377041436"
+      ixx="0.139987" iyy="0.14366" izz="0.005957"
+      ixy="0.000561" iyz="0.00041" ixz="-0.002667"/>
+
+    <xacro:mesh_link name="forearm_link" mesh="forearm_link.stl" material="arm_red"
+      visual_xyz="0.138256 -0.016774 -0.577814" mass="11.828374188557241"
+      com_xyz="0.042815756990162296 -0.02805142576867653 -0.037583917865223415"
+      ixx="0.017388" iyy="0.072426" izz="0.068435"
+      ixy="0.005705" iyz="-0.001455" ixz="0.003843"/>
+
+    <xacro:mesh_link name="wrist_roll_link" mesh="wrist_roll_link.stl" material="arm_red"
+      visual_xyz="-0.084647 0.028566 -0.532814" mass="4.383038580888578"
+      com_xyz="0.08741095338802049 -0.00769183748725593 4.2666050170669934e-07"
+      ixx="0.00427" iyy="0.009794" izz="0.010983"
+      ixy="0.000502" iyz="-0.0" ixz="-0.0"/>
+
+    <xacro:mesh_link name="wrist_pitch_link" mesh="wrist_pitch_link.stl" material="wrist_maroon"
+      visual_xyz="-0.215241 0.027363 -0.532814" mass="2.574095398898211"
+      com_xyz="0.057550382684715545 -0.016880711992809355 4.262487167672191e-07"
+      ixx="0.001826" iyy="0.002708" izz="0.002693"
+      ixy="0.000102" iyz="0.0" ixz="-0.0"/>
+
+    <!-- Joints: all revolute, with axis and limits from Fusion export.
+          base_yaw_joint: -180 to +180 deg
+          shoulder_pitch_joint: 256.5 to 448.5 deg
+          elbow_pitch_joint: -45 to 245 deg
+          wrist_roll_joint: -180 to +180 deg
+          wrist_pitch_joint: -90 to +90 deg
+     -->
+    <xacro:revolute_joint name="base_yaw_joint" parent="base_link" child="turret_link"
+      xyz="0.0 0.004765 0.104765" axis="0.0 0.0 1.0"
+      lower="-3.141592" upper="3.141592" effort="100" velocity="100"/>
+
+    <xacro:revolute_joint name="shoulder_pitch_joint" parent="turret_link" child="upper_arm_link"
+      xyz="-0.138256 0.012009 0.123049" axis="0.086538 0.996249 0.0"
+      lower="4.479" upper="7.833" effort="100" velocity="100"/>
+
+    <xacro:revolute_joint name="elbow_pitch_joint" parent="upper_arm_link" child="forearm_link"
+      xyz="0.0 0.0 0.35" axis="-0.086538 -0.996249 -0.0"
+      lower="-0.785398" upper="4.276057" effort="100" velocity="100"/>
+
+    <xacro:revolute_joint name="wrist_roll_joint" parent="forearm_link" child="wrist_roll_link"
+      xyz="0.222903 -0.04534 -0.045" axis="0.996249 -0.086538 -0.0"
+      lower="-3.141592" upper="3.141592" effort="100" velocity="100"/>
+
+    <xacro:revolute_joint name="wrist_pitch_joint" parent="wrist_roll_link" child="wrist_pitch_link"
+      xyz="0.130594 0.001203 0.0" axis="-0.086538 -0.996249 0.0"
+      lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
+
+  </xacro:macro>
+</robot>

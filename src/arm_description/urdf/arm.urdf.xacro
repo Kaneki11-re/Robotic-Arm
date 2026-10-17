@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot name="arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="use_gazebo" default="false"/>
+  <xacro:arg name="fixed_base" default="true"/>
+  <xacro:arg name="controllers_file"
+             default="$(find arm_description)/config/ros2_controllers.yaml"/>
+
+  <xacro:include filename="$(find arm_description)/urdf/macros/common.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/materials.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/mesh_link.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/joints.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/arm.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/gazebo.xacro"/>
+  <xacro:include filename="$(find arm_description)/urdf/macros/ros2_control.xacro"/>
+
+  <xacro:arm_robot/>
+
+  
+  <xacro:arm_ros2_control/>
+  
+
+  <xacro:if value="$(arg use_gazebo)">
+    <xacro:gz_link_properties name="base_link"/>
+    <xacro:gz_link_properties name="turret_link"/>
+    <xacro:gz_link_properties name="upper_arm_link"/>
+    <xacro:gz_link_properties name="forearm_link"/>
+    <xacro:gz_link_properties name="wrist_roll_link"/>
+    <xacro:gz_link_properties name="wrist_pitch_link"/>
+    <xacro:gz_ros2_control_plugin controllers_file="$(arg controllers_file)"/>
+  </xacro:if>
+
+</robot>
